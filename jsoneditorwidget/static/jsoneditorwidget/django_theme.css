@@ -1,0 +1,104 @@
+.je-container .button {
+  margin: 0 0.3rem 0.3rem 0.3rem;
+  padding: 5px 10px;
+}
+
+.je-container .je-textarea {
+    width: 610px;
+    height: 200px;
+    max-width: 100%;
+}
+
+.je-container .form-control {
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--hairline-color);
+}
+
+.je-container > * .indented-panel {
+  margin: 10px;
+}
+
+/*
+ * ARRAYS (TABLES & TABS)
+ */
+
+.je-container div[data-schematype="array"] .indented-panel {
+  margin: 0;
+}
+
+.je-container div[data-schematype="array"] .je-button-holder {
+  display: inline-block;
+  padding: 6px;
+  margin-left: auto;
+}
+
+.je-container div[data-schematype="array"] > h3.je-header {
+  display: flex;
+  background: var(--primary)!important;
+  align-items: center;
+}
+
+.je-container div[data-schematype="array"] > .je-header label {
+  color: var(--body-bg);
+}
+
+.je-container div[data-schematype="array"] > .je-header .button {
+  border: 1px solid var(--body-bg);
+  margin: 0 0.3rem;
+}
+
+
+/*
+ * ARRAYS (TABLES)
+ */
+
+.je-container div[data-schematype="array"] {
+    margin: 0.5rem 0;
+    border: 1px solid var(--hairline-color);
+}
+
+.je-container div[data-schematype="array"] table {
+  width: 100%;
+}
+
+.je-container table .je-textarea {
+  height: 50px;
+  width: auto;
+}
+
+.je-container table .form-control {
+  padding: 0;
+  border: none;
+}
+
+/*
+ * ARRAYS (TABS)
+ */
+
+.je-container .je-tab-holder {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--body-bg);
+}
+
+.je-container .je-tab-holder > .je-tabs {
+    padding: 10px;
+    min-width: 10%;
+    background-color: var(--darkened-bg);
+}
+
+.je-container .je-tab-holder > .je-content {
+    flex-grow: 1;
+    padding: .5rem;
+}
+
+.je-container .je-tab-holder > .je-tabs .je-tab {
+    margin: 0;
+    padding: 0 .5rem;
+    border-radius: 3px;
+}
+
+.je-container .je-tab-holder > .je-tabs .je-tab.active {
+  background: var(--primary) !important;
+  color: var(--body-bg);
+}
