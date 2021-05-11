@@ -1,5 +1,7 @@
 import json
 
+from copy import deepcopy
+
 from django import forms
 from django.conf import settings
 from django.utils.encoding import force_str
@@ -32,7 +34,7 @@ class JSONEditorWidget(forms.Textarea):
         )
 
     def __init__(self, *args, editor_config=None, **kwargs):
-        self.editor_config = DEFAULT_CONFIG
+        self.editor_config = deepcopy(DEFAULT_CONFIG)
         if editor_config:
             self.editor_config.update(editor_config)
         super().__init__(*args, **kwargs)
