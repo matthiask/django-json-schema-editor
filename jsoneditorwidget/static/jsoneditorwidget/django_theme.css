@@ -22,26 +22,31 @@
  * ARRAYS (TABLES & TABS)
  */
 
+.je-container[data-schematype="array"] .indented-panel,
 .je-container div[data-schematype="array"] .indented-panel {
   margin: 0;
 }
 
+.je-container[data-schematype="array"] .je-button-holder,
 .je-container div[data-schematype="array"] .je-button-holder {
   display: inline-block;
   padding: 6px;
   margin-left: auto;
 }
 
+.je-container[data-schematype="array"] > h3.je-header,
 .je-container div[data-schematype="array"] > h3.je-header {
   display: flex;
   background: var(--primary)!important;
   align-items: center;
 }
 
+.je-container[data-schematype="array"] > .je-header label,
 .je-container div[data-schematype="array"] > .je-header label {
   color: var(--body-bg);
 }
 
+.je-container[data-schematype="array"] > .je-header .button,
 .je-container div[data-schematype="array"] > .je-header .button {
   border: 1px solid var(--body-bg);
   margin: 0 0.3rem;
@@ -52,11 +57,13 @@
  * ARRAYS (TABLES)
  */
 
+.je-container[data-schematype="array"],
 .je-container div[data-schematype="array"] {
     margin: 0.5rem 0;
-    border: 1px solid var(--hairline-color);
+    border-bottom: 1px solid var(--hairline-color);
 }
 
+.je-container[data-schematype="array"] table,
 .je-container div[data-schematype="array"] table {
   width: 100%;
 }
