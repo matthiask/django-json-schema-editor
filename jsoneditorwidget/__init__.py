@@ -5,7 +5,8 @@ from copy import deepcopy
 from django import forms
 from django.conf import settings
 from django.utils.encoding import force_str
-from django.utils.translation import gettext_lazy as _
+from django.utils.text import capfirst
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 
 JSONEDITOR_JS_URL = getattr(
@@ -18,7 +19,12 @@ DEFAULT_CONFIG = getattr(settings, "JSONEDITORWIDGET_DEFAULT_CONFIG", {})
 
 class LazyJSONEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, type(_(""))):
+        if any(isinstance(obj, t) for t in (
+            type(_("")),
+            type(pgettext_lazy("", "")),
+            type(capfirst(_(""))),
+            type(capfirst(pgettext_lazy("", ""))),
+        )):
             return force_str(obj)
 
         super().default(obj)
