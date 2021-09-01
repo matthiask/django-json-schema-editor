@@ -20,10 +20,10 @@ DEFAULT_CONFIG = getattr(settings, "JSONEDITORWIDGET_DEFAULT_CONFIG", {})
 class LazyJSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if any(isinstance(obj, t) for t in (
-            type(_("")),
-            type(pgettext_lazy("", "")),
-            type(capfirst(_(""))),
-            type(capfirst(pgettext_lazy("", ""))),
+            type(_("dummy")),
+            type(pgettext_lazy("dummy", "dummy")),
+            type(capfirst(_("dummy"))),
+            type(capfirst(pgettext_lazy("dummy", "dummy"))),
         )):
             return force_str(obj)
 
