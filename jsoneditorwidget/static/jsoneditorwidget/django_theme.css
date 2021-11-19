@@ -127,3 +127,8 @@
   background: var(--primary) !important;
   color: var(--body-bg);
 }
+
+.je-container .row {
+    display: flex;
+    flex-flow: row wrap;
+}

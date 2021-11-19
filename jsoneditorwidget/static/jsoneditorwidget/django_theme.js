@@ -62,4 +62,7 @@ JSONEditor.defaults.themes.django = class DjangoTheme extends JSONEditor.Abstrac
     el.removeAttribute("style");
     return el;
   }
+  setGridColumnSize(el, size) {
+    el.setAttribute("style", `width: ${size/12*100}%`);
+  }
 }
