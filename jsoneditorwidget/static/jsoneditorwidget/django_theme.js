@@ -1,3 +1,5 @@
+/* global JSONEditor */
+
 JSONEditor.defaults.themes.django = class DjangoTheme extends JSONEditor.AbstractTheme {
   getContainer () {
     // Set wrapper class for easy custom styling
