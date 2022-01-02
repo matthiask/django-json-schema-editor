@@ -67,6 +67,6 @@ JSONEditor.defaults.themes.django = class DjangoTheme extends (
     return el
   }
   setGridColumnSize(el, size) {
-    el.setAttribute("style", `width: ${size/12*100}%`);
+    el.setAttribute("style", `width: ${(size / 12) * 100}%`)
   }
 }
