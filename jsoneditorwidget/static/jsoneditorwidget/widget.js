@@ -28,10 +28,12 @@ const DjangoJSONEditorWidget = {
     const config = JSON.parse(el.dataset["editorConfig"])
     const editor = new JSONEditor(container, config)
 
-    const data = input.value ? JSON.parse(input.value) : null
-    if (data) {
-      editor.setValue(data)
-    }
+    editor.on("ready", () => {
+      const data = input.value ? JSON.parse(input.value) : null
+      if (data) {
+        editor.setValue(data)
+      }
+    })
 
     editor.on("change", () => {
       input.value = JSON.stringify(editor.getValue())
