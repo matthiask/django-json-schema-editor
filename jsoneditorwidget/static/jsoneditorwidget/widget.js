@@ -8,12 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 document.addEventListener("DOMContentLoaded", () => {
-  django.jQuery(document).on("formset:added", (event, $row, _formsetName) => {
-    $row.get().forEach((el) => {
-      el.querySelectorAll(".jsoneditorwidget").forEach((el) =>
-        DjangoJSONEditorWidget.initWidget(el)
-      )
-    })
+  django.jQuery(document).on("formset:added", (event) => {
+    event.target
+      .querySelectorAll(".jsoneditorwidget")
+      .forEach((el) => DjangoJSONEditorWidget.initWidget(el))
   })
 })
 
