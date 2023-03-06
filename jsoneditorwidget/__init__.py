@@ -32,7 +32,7 @@ class JSONEditorWidget(forms.Textarea):
 
     class Media:
         js = (
-            settings.JSONEDITOR_JS_URL,
+            settings.JSONEDITORWIDGET_JSONEDITOR_JS_URL,
             "jsoneditorwidget/widget.js",
         )
 
