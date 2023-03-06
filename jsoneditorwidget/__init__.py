@@ -8,11 +8,6 @@ from django.utils.text import capfirst
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 
-JSONEDITOR_JS_URL = getattr(
-    settings,
-    "JSONEDITORWIDGET_JSONEDITOR_JS_URL",
-    "https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js",  # noqa
-)
 DEFAULT_CONFIG = getattr(settings, "JSONEDITORWIDGET_DEFAULT_CONFIG", {})
 
 
@@ -37,7 +32,7 @@ class JSONEditorWidget(forms.Textarea):
 
     class Media:
         js = (
-            JSONEDITOR_JS_URL,
+            settings.JSONEDITOR_JS_URL,
             "jsoneditorwidget/widget.js",
         )
 
