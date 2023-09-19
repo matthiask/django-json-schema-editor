@@ -24,7 +24,7 @@ class LazyJSONEncoder(json.JSONEncoder):
         ):
             return force_str(obj)
 
-        super().default(obj)
+        return super().default(obj)
 
 
 class JSONEditorWidget(forms.Textarea):
