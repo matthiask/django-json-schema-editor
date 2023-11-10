@@ -5,12 +5,12 @@ JSONEditor.defaults.themes.django = class DjangoTheme extends (
 ) {
   getContainer() {
     // Set wrapper class for easy custom styling
-    var el = document.createElement("div")
+    let el = document.createElement("div")
     el.setAttribute("class", "je-container")
     return el
   }
   getIndentedPanel() {
-    var el = super.getIndentedPanel()
+    let el = super.getIndentedPanel()
 
     // reset styles (borders/spacing)
     el.removeAttribute("style")
@@ -20,24 +20,24 @@ JSONEditor.defaults.themes.django = class DjangoTheme extends (
     return el
   }
   getButton(text, icon, title) {
-    var el = super.getButton(text, icon, title)
-    el.setAttribute("class", el.getAttribute("class") + " button")
+    let el = super.getButton(text, icon, title)
+    el.setAttribute("class", `${el.getAttribute("class")} button`)
     return el
   }
   getButtonHolder() {
-    var el = super.getButtonHolder()
+    let el = super.getButtonHolder()
     el.removeAttribute("style")
     el.classList.add("je-button-holder")
     return el
   }
   getHeaderButtonHolder() {
-    var el = super.getHeaderButtonHolder()
+    let el = super.getHeaderButtonHolder()
     el.removeAttribute("style")
     el.classList.add("je-header-button-holder")
     return el
   }
   getTabHolder() {
-    var el = super.getTabHolder()
+    let el = super.getTabHolder()
     el.setAttribute("class", "je-tab-holder")
     el.innerHTML = [
       "<div class='je-tabs'></div>",
@@ -47,7 +47,7 @@ JSONEditor.defaults.themes.django = class DjangoTheme extends (
     return el
   }
   getTab(span) {
-    var el = super.getTab(span)
+    let el = super.getTab(span)
     el.appendChild(span)
     el.setAttribute("class", "je-tab button")
     el.removeAttribute("style")
@@ -60,7 +60,7 @@ JSONEditor.defaults.themes.django = class DjangoTheme extends (
   }
   getTextareaInput() {
     // reset styles
-    var el = super.getTextareaInput()
+    let el = super.getTextareaInput()
 
     // set class for easier styling via css
     el.removeAttribute("style")
