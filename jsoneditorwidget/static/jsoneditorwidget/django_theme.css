@@ -95,6 +95,10 @@
   border: none;
 }
 
+.je-container [data-schematype="string"] input {
+  min-width: 95%;
+}
+
 /*
  * ARRAYS (TABS)
  */
