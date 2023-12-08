@@ -1,0 +1,105 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+  "hatchling",
+]
+
+[project]
+name = "django-jsoneditorwidget"
+description = "Django widget for using @json-editor/json-editor in the admin"
+readme = "README.md"
+keywords = [
+]
+license = { text = "MIT" }
+authors = [
+  { name = "Matthias Kestenholz", email = "mk@feinheit.ch" },
+]
+requires-python = ">=3.9"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dynamic = [
+  "version",
+]
+dependencies = [
+]
+[project.urls]
+Documentation = "https://github.com/matthiask/django-jsoneditorwidget#readme"
+Issues = "https://github.com/matthiask/django-jsoneditorwidget/issues"
+Source = "https://github.com/matthiask/django-jsoneditorwidget"
+
+[tool.hatch.version]
+path = "jsoneditorwidget/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/jsoneditorwidget",
+]
+
+[tool.ruff]
+extend-select = [
+  # pyflakes, pycodestyle
+  "F", "E", "W",
+  # mmcabe
+  "C90",
+  # isort
+  "I",
+  # pep8-naming
+  "N",
+  # pyupgrade
+  "UP",
+  # flake8-2020
+  "YTT",
+  # flake8-boolean-trap
+  "FBT",
+  # flake8-bugbear
+  "B",
+  # flake8-comprehensions
+  "C4",
+  # flake8-django
+  "DJ",
+  # flake8-implicit-string-concatenation
+  "ISC",
+  # flake8-pie
+  "PIE",
+  # flake8-simplify
+  "SIM",
+  # flake8-gettext
+  "INT",
+  # pygrep-hooks
+  "PGH",
+  # pylint
+  "PLC", "PLE", "PLW",
+  # unused noqa
+  "RUF100",
+]
+extend-ignore = [
+  # Allow zip() without strict=
+  "B905",
+  # No line length errors
+  "E501",
+]
+fix = true
+show-fixes = true
+target-version = "py39"
+
+[tool.ruff.isort]
+combine-as-imports = true
+lines-after-imports = 2
+
+[tool.ruff.mccabe]
+max-complexity = 15
+
+[tool.ruff.per-file-ignores]
+"*/migrat*/*" = [
+  # Allow using PascalCase model names in migrations
+  "N806",
+  # Ignore the fact that migration files are invalid module names
+  "N999",
+]
