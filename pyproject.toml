@@ -28,6 +28,7 @@ dynamic = [
   "version",
 ]
 dependencies = [
+  "fastjsonschema>=2.19",
 ]
 [project.urls]
 Documentation = "https://github.com/matthiask/django-jsoneditorwidget#readme"

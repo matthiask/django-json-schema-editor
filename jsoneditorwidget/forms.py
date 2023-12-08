@@ -1,8 +1,10 @@
 import json
 from copy import deepcopy
 
+import fastjsonschema
 from django import forms
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
 
 
@@ -25,6 +27,14 @@ class JSONEditorField(forms.JSONField):
         kwargs["widget"] = JSONEditorWidget
         super().__init__(*args, **kwargs)
         self.widget.editor_config["schema"] = self._schema
+
+    def clean(self, value):
+        value = super().clean(value)
+        try:
+            fastjsonschema.validate(self._schema, value, use_formats=False)
+        except fastjsonschema.JsonSchemaValueException as ex:
+            raise ValidationError({"data": ex.message}) from ex
+        return value
 
 
 class JSONEditorWidget(forms.Textarea):
