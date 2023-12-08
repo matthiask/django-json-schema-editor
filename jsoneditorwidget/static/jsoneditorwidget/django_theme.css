@@ -2,37 +2,38 @@
   clear: both;
 }
 
-.je-container .je-object__controls {
+.jsoneditorwidget .je-object__controls {
   margin: 0;
 }
 
-.je-container .button {
+.jsoneditorwidget .button {
   margin: 0 0.3rem;
   padding: 5px 10px;
 }
 
-.je-container .je-textarea {
+.jsoneditorwidget .je-textarea {
   width: 610px;
   height: 100px;
   max-width: 100%;
 }
 
-.je-container .form-control {
+.jsoneditorwidget .form-control {
   padding: 0.5rem 0;
   border-bottom: 1px solid var(--hairline-color);
 }
 
-.je-container > * .indented-panel {
+.jsoneditorwidget .indented-panel {
   margin: 10px;
 }
 
-.je-container[data-schematype="boolean"] .form-control label,
-.je-container [data-schematype="boolean"] .form-control label {
+.jsoneditorwidget [data-schematype="boolean"] .form-control label {
   float: none;
 }
 
-.je-container[data-schematype="boolean"] .form-control input[type="checkbox"],
-.je-container [data-schematype="boolean"] .form-control input[type="checkbox"] {
+.jsoneditorwidget
+  [data-schematype="boolean"]
+  .form-control
+  input[type="checkbox"] {
   margin-right: 0.5rem;
 }
 
@@ -40,38 +41,32 @@
  * ARRAYS (TABLES & TABS)
  */
 
-.je-container[data-schematype="array"] .indented-panel,
-.je-container div[data-schematype="array"] .indented-panel {
+.jsoneditorwidget [data-schematype="array"] .indented-panel {
   margin: 0;
 }
 
-.je-container[data-schematype="array"] .je-button-holder,
-.je-container div[data-schematype="array"] .je-button-holder {
+.jsoneditorwidget [data-schematype="array"] .je-button-holder {
   display: inline-block;
   padding: 6px;
   margin-left: auto;
 }
 
-.je-container[data-schematype="array"] > h3.je-header,
-.je-container div[data-schematype="array"] > h3.je-header {
+.jsoneditorwidget [data-schematype="array"] > h3.je-header {
   display: flex;
   background: var(--primary) !important;
   align-items: center;
   padding: 0 10px;
 }
 
-.je-container[data-schematype="array"] > h3.je-header label,
-.je-container div[data-schematype="array"] > h3.je-header label {
+.jsoneditorwidget [data-schematype="array"] > h3.je-header label {
   padding: 0;
 }
 
-.je-container[data-schematype="array"] > .je-header label,
-.je-container div[data-schematype="array"] > .je-header label {
+.jsoneditorwidget [data-schematype="array"] > .je-header label {
   color: var(--body-bg);
 }
 
-.je-container[data-schematype="array"] > .je-header .button,
-.je-container div[data-schematype="array"] > .je-header .button {
+.jsoneditorwidget [data-schematype="array"] > .je-header .button {
   border: 1px solid var(--body-bg);
   margin: 0 0.3rem;
 }
@@ -80,22 +75,21 @@
  * ARRAYS (TABLES)
  */
 
-.je-container[data-schematype="array"] table,
-.je-container div[data-schematype="array"] table {
+.jsoneditorwidget [data-schematype="array"] table {
   width: 100%;
 }
 
-.je-container table .je-textarea {
+.jsoneditorwidget table .je-textarea {
   height: 50px;
   width: 300px;
 }
 
-.je-container table .form-control {
+.jsoneditorwidget table .form-control {
   padding: 0;
   border: none;
 }
 
-.je-container [data-schematype="string"] input {
+.jsoneditorwidget [data-schematype="string"] input {
   min-width: 95%;
 }
 
@@ -103,35 +97,35 @@
  * ARRAYS (TABS)
  */
 
-.je-container .je-tab-holder {
+.jsoneditorwidget .je-tab-holder {
   display: flex;
   align-items: stretch;
   border: 1px solid var(--body-bg);
 }
 
-.je-container .je-tab-holder > .je-tabs {
+.jsoneditorwidget .je-tab-holder > .je-tabs {
   padding: 10px;
   min-width: 10%;
   background-color: var(--darkened-bg);
 }
 
-.je-container .je-tab-holder > .je-content {
+.jsoneditorwidget .je-tab-holder > .je-content {
   flex-grow: 1;
   padding: 0.5rem;
 }
 
-.je-container .je-tab-holder > .je-tabs .je-tab {
+.jsoneditorwidget .je-tab-holder > .je-tabs .je-tab {
   margin: 0;
   padding: 0 0.5rem;
   border-radius: 3px;
 }
 
-.je-container .je-tab-holder > .je-tabs .je-tab.active {
+.jsoneditorwidget .je-tab-holder > .je-tabs .je-tab.active {
   background: var(--primary) !important;
   color: var(--body-bg);
 }
 
-.je-container .row {
+.jsoneditorwidget .row {
   display: flex;
   flex-flow: row wrap;
 }
