@@ -1,12 +1,7 @@
 {% load i18n %}
 <div class="jsoneditorwidget" data-editor-config="{{ editor_config }}">
   <div class="editor"></div>
-
-  <a class="datafield-toggle"
-     data-show-text="{% trans "Show data field" %}"
-     data-hide-text="{% trans "Hide data field" %}"
-     href="#"></a>
-  <div class="datafield-wrapper">
+  <div class="datafield-wrapper" style="display:none">
     {% include "django/forms/widgets/textarea.html" %}
   </div>
 </div>

@@ -12,7 +12,7 @@ DEFAULT_CONFIG = getattr(
     {
         "disable_properties": True,
         "disable_collapse": True,
-        "disable_edit_json": True,
+        # "disable_edit_json": True,
         "display_required_only": False,
         "theme": "django",
     },
