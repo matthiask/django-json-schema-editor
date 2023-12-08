@@ -2,7 +2,7 @@ from functools import partial
 
 from django.db import models
 
-from jsoneditorwidget.forms import JSONEditorField
+from django_json_schema_editor.forms import JSONEditorField
 
 
 class JSONField(models.JSONField):

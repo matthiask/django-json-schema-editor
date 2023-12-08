@@ -38,16 +38,16 @@ class JSONEditorField(forms.JSONField):
 
 
 class JSONEditorWidget(forms.Textarea):
-    template_name = "jsoneditorwidget/widget.html"
+    template_name = "django_json_schema_editor/widget.html"
 
     class Media:
         css = {
-            "screen": ["jsoneditorwidget/django_theme.css"],
+            "screen": ["django_json_schema_editor/django_theme.css"],
         }
         js = (
             "https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js",
-            "jsoneditorwidget/django_theme.js",
-            "jsoneditorwidget/widget.js",
+            "django_json_schema_editor/django_theme.js",
+            "django_json_schema_editor/widget.js",
         )
 
     def __init__(self, *args, editor_config=None, **kwargs):

@@ -1,7 +1,9 @@
 /* global django, JSONEditor */
 document.addEventListener("DOMContentLoaded", () => {
   document
-    .querySelectorAll(".inline-related:not(.empty-form) .jsoneditorwidget")
+    .querySelectorAll(
+      ".inline-related:not(.empty-form) .django_json_schema_editor",
+    )
     .forEach((el) => {
       DjangoJSONEditorWidget.initWidget(el)
     })
@@ -10,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
   django.jQuery(document).on("formset:added", (event) => {
     event.target
-      .querySelectorAll(".jsoneditorwidget")
+      .querySelectorAll(".django_json_schema_editor")
       .forEach((el) => DjangoJSONEditorWidget.initWidget(el))
   })
 })
