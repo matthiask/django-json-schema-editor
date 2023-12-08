@@ -3,28 +3,10 @@ from copy import deepcopy
 
 from django import forms
 from django.conf import settings
-from django.utils.encoding import force_str
-from django.utils.text import capfirst
-from django.utils.translation import gettext_lazy as _, pgettext_lazy
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 DEFAULT_CONFIG = getattr(settings, "JSONEDITORWIDGET_DEFAULT_CONFIG", {})
-
-
-class LazyJSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if any(
-            isinstance(obj, t)
-            for t in (
-                type(_("dummy")),
-                type(pgettext_lazy("dummy", "dummy")),
-                type(capfirst(_("dummy"))),
-                type(capfirst(pgettext_lazy("dummy", "dummy"))),
-            )
-        ):
-            return force_str(obj)
-
-        return super().default(obj)
 
 
 class JSONEditorWidget(forms.Textarea):
@@ -44,5 +26,5 @@ class JSONEditorWidget(forms.Textarea):
 
     def get_context(self, *args, **kwargs):
         context = super().get_context(*args, **kwargs)
-        context["editor_config"] = json.dumps(self.editor_config, cls=LazyJSONEncoder)
+        context["editor_config"] = json.dumps(self.editor_config, cls=DjangoJSONEncoder)
         return context
