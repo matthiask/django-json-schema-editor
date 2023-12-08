@@ -8,11 +8,10 @@ requires = [
 name = "django-jsoneditorwidget"
 description = "Django widget for using @json-editor/json-editor in the admin"
 readme = "README.md"
-keywords = [
-]
 license = { text = "MIT" }
 authors = [
   { name = "Matthias Kestenholz", email = "mk@feinheit.ch" },
+  { name = "Fabian Germann", email = "fg@feinheit.ch" },
 ]
 requires-python = ">=3.9"
 classifiers = [
