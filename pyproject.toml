@@ -5,7 +5,7 @@ requires = [
 ]
 
 [project]
-name = "django-django-json-schema-editor"
+name = "django-json-schema-editor"
 description = "Django widget for using @json-editor/json-editor in the admin"
 readme = "README.md"
 license = { text = "MIT" }
@@ -30,9 +30,9 @@ dependencies = [
   "fastjsonschema>=2.19",
 ]
 [project.urls]
-Documentation = "https://github.com/matthiask/django-django_json_schema_editor#readme"
-Issues = "https://github.com/matthiask/django-django_json_schema_editor/issues"
-Source = "https://github.com/matthiask/django-django_json_schema_editor"
+Documentation = "https://github.com/matthiask/django-json-schema-editor#readme"
+Issues = "https://github.com/matthiask/django-json-schema-editor/issues"
+Source = "https://github.com/matthiask/django-json-schema-editor/"
 
 [tool.hatch.version]
 path = "django_json_schema_editor/__init__.py"
