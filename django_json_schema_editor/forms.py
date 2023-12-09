@@ -6,6 +6,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils.translation import get_language
 
 
 DEFAULT_CONFIG = getattr(
@@ -39,16 +40,7 @@ class JSONEditorField(forms.JSONField):
 
 class JSONEditorWidget(forms.Textarea):
     template_name = "django_json_schema_editor/widget.html"
-
-    class Media:
-        css = {
-            "screen": ["django_json_schema_editor/django_theme.css"],
-        }
-        js = (
-            "django_json_schema_editor/vendor/jsoneditor.js",
-            "django_json_schema_editor/django_theme.js",
-            "django_json_schema_editor/widget.js",
-        )
+    supported_translations = {"de"}
 
     def __init__(self, *args, editor_config=None, **kwargs):
         self.editor_config = deepcopy(DEFAULT_CONFIG)
@@ -60,3 +52,18 @@ class JSONEditorWidget(forms.Textarea):
         context = super().get_context(*args, **kwargs)
         context["editor_config"] = json.dumps(self.editor_config, cls=DjangoJSONEncoder)
         return context
+
+    @property
+    def media(self):
+        css = {
+            "screen": ["django_json_schema_editor/django_theme.css"],
+        }
+        js = [
+            "django_json_schema_editor/vendor/jsoneditor.js",
+            "django_json_schema_editor/django_theme.js",
+            "django_json_schema_editor/widget.js",
+        ]
+        language = get_language()
+        if language in self.supported_translations:
+            js.append(f"django_json_schema_editor/language_{language}.js")
+        return forms.Media(css=css, js=js)
