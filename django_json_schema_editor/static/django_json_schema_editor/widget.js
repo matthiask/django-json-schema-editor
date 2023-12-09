@@ -20,11 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 const initEditor = (el) => {
-  const container = el.querySelector(".editor")
   const input = el.querySelector("textarea")
   const config = JSON.parse(el.dataset.editorConfig)
-  console.debug(container, config)
-  const editor = new JSONEditor(container, config)
+  const editor = new JSONEditor(el, config)
 
   editor.on("ready", () => {
     const data = input.value ? JSON.parse(input.value) : null

@@ -1,7 +1,4 @@
 {% load i18n %}
 <div class="django_json_schema_editor" data-editor-config="{{ editor_config }}">
-  <div class="editor"></div>
-  <div class="datafield-wrapper" style="display:none">
-    {% include "django/forms/widgets/textarea.html" %}
-  </div>
+  {% include "django/forms/widgets/textarea.html" %}
 </div>
