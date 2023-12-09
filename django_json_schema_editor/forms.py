@@ -45,7 +45,7 @@ class JSONEditorWidget(forms.Textarea):
             "screen": ["django_json_schema_editor/django_theme.css"],
         }
         js = (
-            "https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js",
+            "django_json_schema_editor/vendor/jsoneditor.js",
             "django_json_schema_editor/django_theme.js",
             "django_json_schema_editor/widget.js",
         )
