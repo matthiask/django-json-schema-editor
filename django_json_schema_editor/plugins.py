@@ -1,15 +1,14 @@
 from functools import partial
 
 from content_editor.admin import ContentEditorInline
-from django.db import models
 from django.utils.translation import gettext_lazy as _
+from feincms3.proxies import ProxyModelBase
 
 from django_json_schema_editor.fields import JSONField
 from django_json_schema_editor.forms import JSONEditorField
 
 
-class JSONPluginBase(models.Model):
-    type = models.CharField(_("type"), max_length=1000, editable=False)
+class JSONPluginBase(ProxyModelBase):
     data = JSONField(_("data"))
 
     class Meta:
@@ -18,30 +17,9 @@ class JSONPluginBase(models.Model):
     def __str__(self):
         return ""
 
-    def save(self, *args, **kwargs):
-        self.type = self.TYPE
-        super().save(*args, **kwargs)
-
-    save.alters_data = True
-
     @classmethod
     def proxy(cls, type_name, *, schema, **meta):
-        meta["proxy"] = True
-        meta["app_label"] = cls._meta.app_label
-        meta.setdefault("verbose_name", type_name)
-
-        meta_class = type("Meta", (cls.Meta,), meta)
-
-        return type(
-            f"{cls.__qualname__}_{type_name}",
-            (cls,),
-            {
-                "__module__": cls.__module__,
-                "Meta": meta_class,
-                "TYPE": type_name,
-                "SCHEMA": schema,
-            },
-        )
+        return super().proxy(type_name, attrs={"SCHEMA": schema}, **meta)
 
 
 class JSONPluginInline(ContentEditorInline):
