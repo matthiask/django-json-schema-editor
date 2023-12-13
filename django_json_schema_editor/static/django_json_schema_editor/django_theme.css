@@ -1,5 +1,6 @@
 .django_json_schema_editor {
   clear: both;
+  flex-grow: 1;
 }
 
 .django_json_schema_editor > textarea {
@@ -7,7 +8,7 @@
 }
 
 .django_json_schema_editor
-  > [data-schematype="object"]
+  > :not([data-schematype="array"])
   > .je-header:first-child {
   display: none;
 }
@@ -32,6 +33,7 @@
 
 .django_json_schema_editor [data-schematype="boolean"] .form-control label {
   float: none;
+  width: auto;
 }
 
 .django_json_schema_editor
