@@ -3,12 +3,6 @@
 JSONEditor.defaults.themes.django = class DjangoTheme extends (
   JSONEditor.AbstractTheme
 ) {
-  getContainer() {
-    // Set wrapper class for easy custom styling
-    let el = document.createElement("div")
-    el.setAttribute("class", "je-container")
-    return el
-  }
   getIndentedPanel() {
     let el = super.getIndentedPanel()
 
