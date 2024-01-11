@@ -1,12 +1,11 @@
 /* global django, JSONEditor */
 document.addEventListener("DOMContentLoaded", () => {
-  document
-    .querySelectorAll(
-      ".inline-related:not(.empty-form) .django_json_schema_editor",
-    )
-    .forEach((el) => {
+  document.querySelectorAll(".django_json_schema_editor").forEach((el) => {
+    let textarea = el.querySelector("textarea")
+    if (textarea && !textarea.id.includes("__prefix__")) {
       initEditor(el)
-    })
+    }
+  })
 })
 
 document.addEventListener("DOMContentLoaded", () => {
