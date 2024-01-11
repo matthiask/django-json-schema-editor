@@ -28,7 +28,6 @@
 }
 
 .django_json_schema_editor .indented-panel {
-  margin: 10px 0;
 }
 
 .django_json_schema_editor [data-schematype="boolean"] .form-control label {
@@ -47,12 +46,8 @@
  * ARRAYS (TABLES & TABS)
  */
 
-.django_json_schema_editor [data-schematype="array"] .indented-panel {
-  margin: 0;
-}
-
 .django_json_schema_editor [data-schematype="array"] .je-button-holder {
-  display: inline-flex;
+  display: inline-flex !important;
   gap: 4px;
   padding: 4px 8px;
 }
@@ -65,11 +60,30 @@
   margin-right: 4px;
 }
 
+.django_json_schema_editor [data-schematype="array"] .je-object__container {
+  border: 1px solid var(--hairline-color);
+}
+
+.django_json_schema_editor
+  [data-schematype="array"]
+  .je-object__container
+  + .je-object__container {
+  border-top: none;
+}
+
+.django_json_schema_editor
+  [data-schematype="array"]
+  .je-object__container
+  .indented-panel {
+  padding: 0 10px;
+}
+
 .django_json_schema_editor [data-schematype="array"] > h3.je-header {
   display: flex;
   background: var(--primary) !important;
   align-items: center;
   padding: 3px 10px 0 10px;
+  margin-bottom: 0;
 }
 
 .django_json_schema_editor [data-schematype="array"] > h3.je-header label {
@@ -97,8 +111,25 @@
   height: 70px;
 }
 .django_json_schema_editor .je-textarea,
-.django_json_schema_editor [data-schematype="string"] input {
+.django_json_schema_editor
+  [data-schematype="array"]
+  [data-schematype="string"]
+  input {
   width: calc(100% - 16px);
+}
+
+.django_json_schema_editor
+  [data-schematype="array"]
+  [data-schematype="object"]
+  .je-textarea {
+  width: min(80vw, 40em);
+}
+.django_json_schema_editor
+  [data-schematype="array"]
+  [data-schematype="object"]
+  [data-schematype="string"]:not(td)
+  input {
+  width: 20em;
 }
 
 .django_json_schema_editor [data-schematype="boolean"] .form-control {
