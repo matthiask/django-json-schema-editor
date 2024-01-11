@@ -7,6 +7,7 @@ from django_json_schema_editor.forms import JSONEditorField
 
 class JSONField(models.JSONField):
     def __init__(self, *args, **kwargs):
+        self._config = kwargs.pop("config", None)
         self._schema = kwargs.pop("schema", None)
         super().__init__(*args, **kwargs)
 
@@ -15,5 +16,8 @@ class JSONField(models.JSONField):
         return name, "django.db.models.JSONField", args, kwargs
 
     def formfield(self, **kwargs):
-        kwargs.setdefault("form_class", partial(JSONEditorField, schema=self._schema))
+        kwargs.setdefault(
+            "form_class",
+            partial(JSONEditorField, config=self._config, schema=self._schema),
+        )
         return super().formfield(**kwargs)
