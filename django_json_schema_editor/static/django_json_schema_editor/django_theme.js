@@ -27,7 +27,7 @@ JSONEditor.defaults.themes.django = class DjangoTheme extends (
   getHeaderButtonHolder() {
     let el = super.getHeaderButtonHolder()
     el.removeAttribute("style")
-    el.classList.add("je-header-button-holder")
+    el.classList.add("je-button-holder")
     return el
   }
   getTabHolder() {
