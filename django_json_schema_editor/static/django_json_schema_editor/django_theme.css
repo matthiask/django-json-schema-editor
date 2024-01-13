@@ -7,6 +7,7 @@
   display: none;
 }
 
+/* Hide the first title since it's useless */
 .django_json_schema_editor
   > :not([data-schematype="array"])
   > .je-header:first-child {
@@ -37,20 +38,42 @@
   padding: 5px 10px;
 }
 
-.django_json_schema_editor .row + .row {
-  padding-top: 0.5rem;
+.django_json_schema_editor .button span {
+  white-space: nowrap;
 }
 
-.django_json_schema_editor .form-control {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--hairline-color);
+.django_json_schema_editor .row {
+  display: flex;
+  flex-flow: row wrap;
+  margin: 0.5rem 0;
 }
 
+/* Remove margin from first row ... */
+.django_json_schema_editor .row:first-child {
+  margin-top: 0;
+}
+
+/* ... but add it back to the first object container */
 .django_json_schema_editor
-  [data-schematype="array"]
-  .je-object__title
+  .row:first-child
+  > .je-object__container:first-child {
+  margin-top: 0.5rem;
+}
+
+.django_json_schema_editor .row + .row {
+  border-top: 1px solid var(--hairline-color);
+}
+
+.django_json_schema_editor .je-object__title ~ .indented-panel {
+  margin-top: -12px;
+}
+
+/* See above; first title is hidden, reset the negative top margin in this case */
+.django_json_schema_editor
+  > :not([data-schematype="array"])
+  > .je-header:first-child
   ~ .indented-panel {
-  margin-top: -10px;
+  margin-top: 0;
 }
 
 .django_json_schema_editor [data-schematype="boolean"] .form-control label {
@@ -71,6 +94,7 @@
 
 .django_json_schema_editor .je-button-holder {
   display: inline-flex !important;
+  flex-wrap: wrap;
   gap: 4px;
   padding: 4px 8px;
 }
@@ -83,7 +107,8 @@
   margin-right: 4px;
 }
 
-.django_json_schema_editor [data-schematype="array"] .je-object__container {
+.django_json_schema_editor .je-object__container,
+.django_json_schema_editor [data-schematype="array"] {
   border: 1px solid var(--hairline-color);
 }
 
@@ -95,9 +120,13 @@
 }
 
 .django_json_schema_editor
-  [data-schematype="array"]
   .je-object__container
-  .indented-panel {
+  .je-object__container
+  .json-editor-btntype-editjson {
+  display: none;
+}
+
+.django_json_schema_editor .je-object__container > .indented-panel {
   padding: 0 10px;
 }
 
@@ -137,7 +166,7 @@
 .django_json_schema_editor
   [data-schematype="array"]
   [data-schematype="string"]
-  input {
+  input:not(.vForeignKeyRawIdAdminField) {
   width: calc(100% - 16px);
 }
 
@@ -194,9 +223,4 @@
 .django_json_schema_editor .je-tab-holder > .je-tabs .je-tab.active {
   background: var(--primary) !important;
   color: var(--body-bg);
-}
-
-.django_json_schema_editor .row {
-  display: flex;
-  flex-flow: row wrap;
 }
