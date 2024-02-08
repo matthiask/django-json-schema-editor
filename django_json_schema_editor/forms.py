@@ -24,7 +24,7 @@ DEFAULT_CONFIG = getattr(
 
 class JSONEditorField(forms.JSONField):
     def __init__(self, *args, **kwargs):
-        self._config = kwargs.pop("config")
+        self._config = kwargs.pop("config", {})
         self._schema = kwargs.pop("schema")
         kwargs["widget"] = JSONEditorWidget
         super().__init__(*args, **kwargs)
