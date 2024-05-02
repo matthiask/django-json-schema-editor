@@ -65,6 +65,7 @@ class JSONEditorWidget(forms.Textarea):
         js = [
             "django_json_schema_editor/vendor/jsoneditor.js",
             "django_json_schema_editor/django_theme.js",
+            "django_json_schema_editor/foreign_key.js",
             "django_json_schema_editor/widget.js",
         ]
         language = get_language()

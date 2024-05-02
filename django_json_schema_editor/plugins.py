@@ -2,6 +2,7 @@ from functools import partial
 
 from content_editor.admin import ContentEditorInline
 from django.db import models
+from django.db.models import Q, signals
 from django.utils.translation import gettext_lazy as _
 
 from django_json_schema_editor.fields import JSONField
@@ -16,7 +17,7 @@ class JSONPluginBase(models.Model):
         abstract = True
 
     def __str__(self):
-        return ""
+        return f"{self.type!r} on {self.parent!r}"
 
     def save(self, *args, **kwargs):
         self.type = self.TYPE
@@ -52,3 +53,37 @@ class JSONPluginInline(ContentEditorInline):
         if db_field.name == "data":
             kwargs["form_class"] = partial(JSONEditorField, schema=self.model.SCHEMA)
         return super().formfield_for_dbfield(db_field, request, **kwargs)
+
+
+def register_reference(jsonplugin, name, to):
+    class Meta:
+        verbose_name = f"{jsonplugin.__name__} ⇒ {to.__name__} reference"
+
+    ns = {
+        "__module__": jsonplugin.__module__,
+        "parent": models.ForeignKey(
+            jsonplugin, on_delete=models.CASCADE, related_name="+"
+        ),
+        "object": models.ForeignKey(to, on_delete=models.PROTECT, related_name="+"),
+        "Meta": Meta,
+        "__str__": lambda obj: str(obj.parent),
+    }
+
+    reference = type(f"{jsonplugin.__name__}_{to.__name__}_ref", (models.Model,), ns)
+
+    def listener(sender, instance, **kwargs):
+        if not isinstance(instance, jsonplugin):
+            return
+
+        pks = [pk for pk in instance.data[name] if pk]
+        for pk in pks:
+            reference.objects.update_or_create(parent=instance, object_id=pk)
+        reference.objects.filter(Q(parent=instance) & ~Q(object_id__in=pks)).delete()
+
+    # This doesn't work because we're using proxy models:
+    # signals.post_save.connect(listener, sender=jsonplugin, weak=False)
+    signals.post_save.connect(listener, weak=False)
+
+    models.ManyToManyField(to, editable=False, through=reference).contribute_to_class(
+        jsonplugin, name
+    )
