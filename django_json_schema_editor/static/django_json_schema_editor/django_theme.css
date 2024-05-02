@@ -183,12 +183,6 @@
 .django_json_schema_editor
   [data-schematype="array"]
   [data-schematype="object"]
-  .je-textarea {
-  width: min(80vw, 40em);
-}
-.django_json_schema_editor
-  [data-schematype="array"]
-  [data-schematype="object"]
   [data-schematype="string"]:not(td)
   input {
   width: 20em;
