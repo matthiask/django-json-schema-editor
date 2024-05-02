@@ -60,7 +60,7 @@
   margin-top: 0.5rem;
 }
 
-.django_json_schema_editor .row + .row {
+.django_json_schema_editor .row + .row:not(:has(> [data-schematype="array"])) {
   border-top: 1px solid var(--hairline-color);
 }
 
@@ -107,9 +107,19 @@
   margin-right: 4px;
 }
 
-.django_json_schema_editor .je-object__container,
+.django_json_schema_editor .je-object__container {
+  border: 1px solid var(--hairline-color);
+}
+
 .django_json_schema_editor [data-schematype="array"] {
   border: 1px solid var(--hairline-color);
+  border-top: none;
+}
+
+.django_json_schema_editor
+  [data-schematype="array"]
+  > .je-header:has(+ .indented-panel > div > table) {
+  display: none;
 }
 
 .django_json_schema_editor
