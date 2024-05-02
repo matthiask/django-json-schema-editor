@@ -38,7 +38,7 @@ class JSONEditorField(forms.JSONField):
         try:
             fastjsonschema.validate(self._schema, value, use_formats=False)
         except fastjsonschema.JsonSchemaValueException as ex:
-            raise ValidationError({"data": ex.message}) from ex
+            raise ValidationError(ex.message) from ex
         return value
 
 
