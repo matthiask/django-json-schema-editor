@@ -93,7 +93,7 @@
  */
 
 .django_json_schema_editor .je-button-holder {
-  display: inline-flex !important;
+  display: inline-flex;
   flex-wrap: wrap;
   gap: 4px;
   padding: 4px 8px;
