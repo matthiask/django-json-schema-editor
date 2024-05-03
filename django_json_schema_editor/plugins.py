@@ -3,6 +3,7 @@ from functools import partial
 from content_editor.admin import ContentEditorInline
 from django.db import models
 from django.db.models import Q, signals
+from django.utils.text import capfirst
 from django.utils.translation import gettext_lazy as _
 
 from django_json_schema_editor.fields import JSONField
@@ -17,7 +18,8 @@ class JSONPluginBase(models.Model):
         abstract = True
 
     def __str__(self):
-        return f"{self.type!r} on {self.parent!r}"
+        type = capfirst(self._verbose_names.get(self.type, self.type))
+        return f'{type} on {self.parent._meta.verbose_name} "{self.parent}"'
 
     def save(self, *args, **kwargs):
         self.type = self.TYPE
@@ -32,6 +34,10 @@ class JSONPluginBase(models.Model):
         meta.setdefault("verbose_name", type_name)
 
         meta_class = type("Meta", (cls.Meta,), meta)
+
+        if not hasattr(cls, "_verbose_names"):
+            cls._verbose_names = {}
+        cls._verbose_names[type_name] = meta_class.verbose_name
 
         return type(
             f"{cls.__qualname__}_{type_name}",
