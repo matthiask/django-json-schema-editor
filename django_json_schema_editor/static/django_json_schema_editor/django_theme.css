@@ -99,6 +99,14 @@
   padding: 4px 8px;
 }
 
+.django_json_schema_editor > * > .je-button-holder {
+  transform: scale(0.75);
+  transform-origin: top right;
+  position: absolute;
+  top: -20px;
+  right: 20%;
+}
+
 .django_json_schema_editor .je-modal textarea {
   min-width: min(70vw, 300px);
   min-height: 150px;
