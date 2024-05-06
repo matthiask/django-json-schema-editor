@@ -80,8 +80,11 @@ def register_reference(jsonplugin, name, to):
     def listener(sender, instance, **kwargs):
         if not isinstance(instance, jsonplugin):
             return
+        data = instance.data.get(name)
+        if not isinstance(data, list):
+            return
 
-        pks = [pk for pk in instance.data[name] if pk]
+        pks = [pk for pk in data if pk]
         for pk in pks:
             reference.objects.update_or_create(parent=instance, object_id=pk)
         reference.objects.filter(Q(parent=instance) & ~Q(object_id__in=pks)).delete()
