@@ -173,10 +173,7 @@
   height: 70px;
 }
 .django_json_schema_editor .je-textarea,
-.django_json_schema_editor
-  [data-schematype="array"]
-  [data-schematype="string"]
-  input:not(.vForeignKeyRawIdAdminField) {
+.django_json_schema_editor input:not(.vForeignKeyRawIdAdminField) {
   width: calc(100% - 16px);
 }
 
