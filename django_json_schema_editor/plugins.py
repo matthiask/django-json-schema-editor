@@ -2,7 +2,6 @@ from functools import partial
 
 from content_editor.admin import ContentEditorInline
 from django.db import models
-from django.db.models import Q, signals
 from django.utils.text import capfirst
 from django.utils.translation import gettext_lazy as _
 
@@ -59,40 +58,3 @@ class JSONPluginInline(ContentEditorInline):
         if db_field.name == "data":
             kwargs["form_class"] = partial(JSONEditorField, schema=self.model.SCHEMA)
         return super().formfield_for_dbfield(db_field, request, **kwargs)
-
-
-def register_reference(jsonplugin, name, to):
-    class Meta:
-        verbose_name = f"{jsonplugin.__name__} ⇒ {to.__name__} reference"
-
-    ns = {
-        "__module__": jsonplugin.__module__,
-        "parent": models.ForeignKey(
-            jsonplugin, on_delete=models.CASCADE, related_name="+"
-        ),
-        "object": models.ForeignKey(to, on_delete=models.PROTECT, related_name="+"),
-        "Meta": Meta,
-        "__str__": lambda obj: str(obj.parent),
-    }
-
-    reference = type(f"{jsonplugin.__name__}_{to.__name__}_ref", (models.Model,), ns)
-
-    def listener(sender, instance, **kwargs):
-        if not isinstance(instance, jsonplugin):
-            return
-        data = instance.data.get(name)
-        if not isinstance(data, list):
-            return
-
-        pks = [pk for pk in data if pk]
-        for pk in pks:
-            reference.objects.update_or_create(parent=instance, object_id=pk)
-        reference.objects.filter(Q(parent=instance) & ~Q(object_id__in=pks)).delete()
-
-    # This doesn't work because we're using proxy models:
-    # signals.post_save.connect(listener, sender=jsonplugin, weak=False)
-    signals.post_save.connect(listener, weak=False)
-
-    models.ManyToManyField(to, editable=False, through=reference).contribute_to_class(
-        jsonplugin, name
-    )
