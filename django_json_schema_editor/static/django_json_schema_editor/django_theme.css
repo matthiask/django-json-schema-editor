@@ -3,6 +3,11 @@
   flex-grow: 1;
 }
 
+/* Use a minimal height for the JSON editor when a modal is open */
+.django_json_schema_editor:has(.je-modal:not([style*="display: none"])) {
+  min-height: 150px;
+}
+
 .django_json_schema_editor > textarea {
   display: none;
 }
