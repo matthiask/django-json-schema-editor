@@ -13,7 +13,7 @@ DEFAULT_CONFIG = getattr(
     settings,
     "JSONEDITORWIDGET_DEFAULT_CONFIG",
     {
-        "disable_properties": True,
+        # "disable_properties": True,
         "disable_collapse": True,
         # "disable_edit_json": True,
         "display_required_only": False,
