@@ -11,7 +11,7 @@ from django_json_schema_editor.forms import JSONEditorField
 
 class JSONPluginBase(models.Model):
     type = models.CharField(_("type"), max_length=1000, editable=False)
-    data = JSONField("")
+    data = JSONField("", blank=True)
 
     class Meta:
         abstract = True
