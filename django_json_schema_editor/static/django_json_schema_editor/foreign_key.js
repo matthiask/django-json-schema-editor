@@ -7,36 +7,34 @@ document.addEventListener("DOMContentLoaded", () => {
     // Django allows more than one popup per raw ID field, account for that.
     let input = document.getElementById(win.name.replace(/__[0-9]+$/, ""))
     __original_dismissRelatedLookupPopup(win, chosenId)
-    django.jQuery(input).trigger("change")
+
+    input.dispatchEvent(new Event("input"))
   }
 })
 /* End patching */
 
 JSONEditor.defaults.editors.foreign_key = class extends (
-  JSONEditor.AbstractEditor
+  JSONEditor.defaults.editors.string
 ) {
-  setValue = function (value, _initial) {
-    if (value) {
-      this.value = this.input.value = value
-    } else {
-      this.value = this.input.value = ""
-    }
-    this.onChange(true)
+  build() {
+    this.options.format = ""
+    super.build()
+    this.input_type = this.schema.format
   }
 
-  build = function () {
+  afterInputReady() {
     let id = Math.random().toString(36).substr(2, 5)
-    this.input = document.createElement("input")
-    this.input.setAttribute("type", "text")
     this.input.className = "vForeignKeyRawIdAdminField"
     this.input.setAttribute("id", `id_${id}`)
     this.input.setAttribute("name", id)
 
-    let editor = this
-    this.input.onchange = function () {
-      editor.setValue(this.value)
-      django.jQuery(editor).trigger("change")
-    }
+    this.input.addEventListener("input", (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      this.value = this.input.value
+      this.onChange(true)
+    })
 
     let relatedLookupLink = document.createElement("a")
     relatedLookupLink.className = "related-lookup"
