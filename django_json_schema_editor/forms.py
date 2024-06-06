@@ -1,4 +1,5 @@
 import json
+import warnings
 from copy import deepcopy
 
 import fastjsonschema
@@ -35,10 +36,17 @@ class JSONEditorField(forms.JSONField):
 
     def clean(self, value):
         value = super().clean(value)
-        try:
-            fastjsonschema.validate(self._schema, value, use_formats=False)
-        except fastjsonschema.JsonSchemaValueException as ex:
-            raise ValidationError(ex.message) from ex
+        if schema := self._schema:
+            try:
+                fastjsonschema.validate(schema, value, use_formats=False)
+            except fastjsonschema.JsonSchemaValueException as ex:
+                raise ValidationError(ex.message) from ex
+        else:
+            warnings.warn(
+                "Skipping JSON validation because there's no schema.",
+                RuntimeWarning,
+                stacklevel=1,
+            )
         return value
 
 
