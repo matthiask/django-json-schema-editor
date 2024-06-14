@@ -52,7 +52,7 @@ JSONEditor.defaults.editors.foreign_key = class extends (
     wrapper.appendChild(this.input)
     wrapper.appendChild(relatedLookupLink)
 
-    this.container.appendChild(wrapper)
+    this.container.querySelector(".form-control").appendChild(wrapper)
   }
 }
 
