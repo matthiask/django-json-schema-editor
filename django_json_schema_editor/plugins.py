@@ -87,5 +87,9 @@ class JSONPluginInline(ContentEditorInline):
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name == "data":
-            kwargs["form_class"] = partial(JSONEditorField, schema=self.model.SCHEMA)
+            kwargs["form_class"] = partial(
+                JSONEditorField,
+                schema=self.model.SCHEMA,
+                foreign_key_descriptions=getattr(self, "foreign_key_descriptions", []),
+            )
         return super().formfield_for_dbfield(db_field, request, **kwargs)

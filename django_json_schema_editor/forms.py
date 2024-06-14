@@ -4,9 +4,11 @@ from copy import deepcopy
 
 import fastjsonschema
 from django import forms
+from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils.text import Truncator
 from django.utils.translation import get_language
 
 
@@ -27,12 +29,14 @@ class JSONEditorField(forms.JSONField):
     def __init__(self, *args, **kwargs):
         self._config = kwargs.pop("config", {})
         self._schema = kwargs.pop("schema")
+        self._foreign_key_descriptions = kwargs.pop("foreign_key_descriptions", [])
         kwargs["widget"] = JSONEditorWidget
         super().__init__(*args, **kwargs)
         if self._config:
             self.widget.editor_config.update(self._config)
         if self._schema:
             self.widget.editor_config["schema"] = self._schema
+        self.widget.foreign_key_descriptions = self._foreign_key_descriptions
 
     def clean(self, value):
         value = super().clean(value)
@@ -50,6 +54,18 @@ class JSONEditorField(forms.JSONField):
         return value
 
 
+def resolve_foreign_key_descriptions(model, pks):
+    pks = [pk for pk in pks if pk] if pks else ()
+    return (
+        {
+            f"{model._meta.label_lower}:{obj.pk}": Truncator(obj).words(5)
+            for obj in model._default_manager.filter(pk__in=pks)
+        }
+        if pks
+        else {}
+    )
+
+
 class JSONEditorWidget(forms.Textarea):
     template_name = "django_json_schema_editor/widget.html"
     supported_translations = {"de"}
@@ -63,6 +79,16 @@ class JSONEditorWidget(forms.Textarea):
     def get_context(self, *args, **kwargs):
         context = super().get_context(*args, **kwargs)
         context["editor_config"] = json.dumps(self.editor_config, cls=DjangoJSONEncoder)
+
+        if (fkd := getattr(self, "foreign_key_descriptions", None)) and (
+            value := json.loads(context["widget"]["value"])
+        ):
+            fk = {}
+            for model, getter in fkd:
+                fk |= resolve_foreign_key_descriptions(
+                    apps.get_model(model), getter(value)
+                )
+            context["foreign_key"] = json.dumps(fk)
         return context
 
     @property
