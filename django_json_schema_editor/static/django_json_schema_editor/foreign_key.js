@@ -33,6 +33,7 @@ JSONEditor.defaults.editors.foreign_key = class extends (
       e.stopPropagation()
 
       this.value = this.input.value
+      this.relatedName.textContent = ""
       this.onChange(true)
     })
 
@@ -46,13 +47,26 @@ JSONEditor.defaults.editors.foreign_key = class extends (
       "return showRelatedObjectLookupPopup(this);",
     )
 
+    this.relatedName = document.createElement("strong")
+    this.relatedName.textContent =
+      window.__djse_foreignKeys?.[`${this.options.model}:${this.value}`]
+
     let wrapper = document.createElement("div")
     wrapper.className = "related-widget-wrapper"
 
-    wrapper.appendChild(this.input)
-    wrapper.appendChild(relatedLookupLink)
+    wrapper.append(this.input)
+    wrapper.append(relatedLookupLink)
+    wrapper.append(this.relatedName)
 
-    this.container.querySelector(".form-control").appendChild(wrapper)
+    this.container.querySelector(".form-control").append(wrapper)
+  }
+
+  setValue(...args) {
+    super.setValue(...args)
+    if (this.relatedName) {
+      this.relatedName.textContent =
+        window.__djse_foreignKeys?.[`${this.options.model}:${this.value}`]
+    }
   }
 }
 

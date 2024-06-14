@@ -1,4 +1,6 @@
 /* global django, JSONEditor */
+window.__djse_foreignKeys = {}
+
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".django_json_schema_editor").forEach((el) => {
     let textarea = el.querySelector("textarea")
@@ -19,6 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 const initEditor = (el) => {
+  if (el.dataset.foreignKey) {
+    Object.assign(window.__djse_foreignKeys, JSON.parse(el.dataset.foreignKey))
+  }
+
   const input = el.querySelector("textarea")
   const config = JSON.parse(el.dataset.editorConfig)
   const editor = new JSONEditor(el, config)
