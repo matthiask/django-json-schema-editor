@@ -98,10 +98,13 @@
  */
 
 .django_json_schema_editor .je-button-holder {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 4px;
+  display: inline-block;
   padding: 4px 8px;
+}
+
+.django_json_schema_editor .je-button-holder .button {
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .django_json_schema_editor > * > .je-button-holder {
