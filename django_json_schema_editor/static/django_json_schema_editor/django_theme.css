@@ -110,6 +110,7 @@
   position: absolute;
   top: -20px;
   right: 20%;
+  z-index: 1;
 }
 
 .django_json_schema_editor .je-modal textarea {
