@@ -3,7 +3,7 @@ window.__djse_foreignKeys = {}
 
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".django_json_schema_editor").forEach((el) => {
-    let textarea = el.querySelector("textarea")
+    const textarea = el.querySelector("textarea")
     if (textarea && !textarea.id.includes("__prefix__")) {
       initEditor(el)
     }
