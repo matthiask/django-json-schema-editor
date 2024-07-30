@@ -1,7 +1,7 @@
 /* global JSONEditor */
 
 JSONEditor.defaults.themes.django = class DjangoTheme extends (
-  JSONEditor.AbstractTheme
+  JSONEditor.defaults.themes.html
 ) {
   getIndentedPanel() {
     const el = super.getIndentedPanel()
