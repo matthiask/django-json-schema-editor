@@ -52,11 +52,7 @@ JSONEditor.defaults.editors.foreign_key = class extends (
       window.__djse_foreignKeys?.[`${this.options.model}:${this.value}`]
 
     const wrapper = document.createElement("div")
-    wrapper.className = "related-widget-wrapper"
-
-    wrapper.append(this.input)
-    wrapper.append(relatedLookupLink)
-    wrapper.append(this.relatedName)
+    wrapper.append(this.input, relatedLookupLink, this.relatedName)
 
     this.container.querySelector(".form-control").append(wrapper)
   }
