@@ -1,22 +1,21 @@
-/* global django, JSONEditor */
 window.__djse_foreignKeys = {}
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".django_json_schema_editor").forEach((el) => {
+  const editors = document.querySelectorAll(".django_json_schema_editor")
+  for (const el of editors) {
     const textarea = el.querySelector("textarea")
     if (textarea && !textarea.id.includes("__prefix__")) {
       initEditor(el)
     }
-  })
+  }
 })
 
 document.addEventListener("DOMContentLoaded", () => {
   django.jQuery(document).on("formset:added", (event) => {
-    event.target
-      .querySelectorAll(".django_json_schema_editor")
-      .forEach((el) => {
-        initEditor(el)
-      })
+    const editors = event.target.querySelectorAll(".django_json_schema_editor")
+    for (const el of editors) {
+      initEditor(el)
+    }
   })
 })
 

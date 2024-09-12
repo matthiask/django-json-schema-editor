@@ -1,4 +1,4 @@
-const { django, JSONEditor } = window
+const { JSONEditor } = window
 
 /* Patch functions with ones emitting a 'change' event after closing the popup */
 document.addEventListener("DOMContentLoaded", () => {
