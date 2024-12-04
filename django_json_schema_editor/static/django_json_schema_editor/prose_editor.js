@@ -1,6 +1,46 @@
-const config = {
-  // Hardcoded for now.
-  types: ["hard_break", "strong", "em", "underline", "sub", "sup"],
+function createJSONProseEditor(textarea) {
+  const {
+    // Always recommended:
+    Document,
+    Dropcursor,
+    Gapcursor,
+    Paragraph,
+    HardBreak,
+    Text,
+
+    // Add support for a few marks:
+    Bold,
+    Italic,
+    Underline,
+    Subscript,
+    Superscript,
+
+    // A menu is always nice:
+    Menu,
+
+    // Useful:
+    createTextareaEditor,
+  } = window.DjangoProseEditor
+
+  const extensions = [
+    Document,
+    Dropcursor,
+    Gapcursor,
+    Paragraph,
+    HardBreak,
+    Text,
+    Bold,
+    Italic,
+    Underline,
+    Subscript,
+    Superscript,
+    Menu,
+  ]
+
+  const editor = createTextareaEditor(textarea, extensions)
+  return () => {
+    editor.destroy()
+  }
 }
 
 JSONEditor.defaults.editors.prose = class extends (
@@ -11,7 +51,7 @@ JSONEditor.defaults.editors.prose = class extends (
 
     if (res?.changed) {
       this.clobber?.()
-      this.clobber = DjangoProseEditor.createEditor(this.input, config)
+      this.clobber = createJSONProseEditor(this.input)
     }
   }
 
@@ -23,7 +63,7 @@ JSONEditor.defaults.editors.prose = class extends (
 
   afterInputReady() {
     this.clobber?.()
-    this.clobber = DjangoProseEditor.createEditor(this.input, config)
+    this.clobber = createJSONProseEditor(this.input)
 
     this.input.addEventListener("input", (e) => {
       e.preventDefault()
