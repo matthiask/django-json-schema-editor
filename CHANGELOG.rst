@@ -4,6 +4,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Fixed the JSON plugin data reference handling.
+
+
 0.2 (2024-12-04)
 ~~~~~~~~~~~~~~~~
 
