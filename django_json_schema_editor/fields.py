@@ -29,7 +29,8 @@ def _register_reference(jsonmodel, to, *, name, getter):
     def listener(sender, instance, **kwargs):
         if not isinstance(instance, jsonmodel):
             return
-        if not (data := getter(instance)) or not isinstance(data, list):
+
+        if (data := getter(instance)) is None or not isinstance(data, list):
             return
 
         pks = [pk for pk in data if pk]
