@@ -4,6 +4,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+0.3 (2025-03-20)
+~~~~~~~~~~~~~~~~
+
 - Fixed the JSON plugin data reference handling.
 - Added a ``[prose]`` extra depending on the newest alpha version of
   django-prose-editor.
