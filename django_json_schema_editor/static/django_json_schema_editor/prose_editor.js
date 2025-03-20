@@ -1,27 +1,24 @@
+import {
+  // Always recommended:
+  Document,
+  Dropcursor,
+  Gapcursor,
+  Paragraph,
+  HardBreak,
+  Text,
+  // Add support for a few marks:
+  Bold,
+  Italic,
+  Underline,
+  Subscript,
+  Superscript,
+  // A menu is always nice:
+  Menu,
+  // Useful:
+  createTextareaEditor,
+} from "django-prose-editor/editor"
+
 function createJSONProseEditor(textarea) {
-  const {
-    // Always recommended:
-    Document,
-    Dropcursor,
-    Gapcursor,
-    Paragraph,
-    HardBreak,
-    Text,
-
-    // Add support for a few marks:
-    Bold,
-    Italic,
-    Underline,
-    Subscript,
-    Superscript,
-
-    // A menu is always nice:
-    Menu,
-
-    // Useful:
-    createTextareaEditor,
-  } = window.DjangoProseEditor
-
   const extensions = [
     Document,
     Dropcursor,

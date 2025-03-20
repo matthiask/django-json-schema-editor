@@ -28,8 +28,13 @@ dynamic = [
   "version",
 ]
 dependencies = [
+  "django-js-asset>=3",
   "fastjsonschema>=2.19",
 ]
+optional-dependencies.prose = [
+  "django-prose-editor>=0.11a11",
+]
+
 urls.Documentation = "https://github.com/matthiask/django-json-schema-editor#readme"
 urls.Issues = "https://github.com/matthiask/django-json-schema-editor/issues"
 urls.Source = "https://github.com/matthiask/django-json-schema-editor/"
