@@ -4,6 +4,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Added a simple e2e test suite.
+
+
 0.3 (2025-03-20)
 ~~~~~~~~~~~~~~~~
 

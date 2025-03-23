@@ -10,7 +10,16 @@ from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.text import Truncator
 from django.utils.translation import get_language
-from js_asset import JS
+from js_asset import JS, importmap
+
+
+# Optional import for prose editor support. The import has the side effect of
+# updating the importmap with the necessary entries our prose editor plugin
+# needs.
+try:
+    import django_prose_editor.widgets  # noqa: F401
+except ImportError:
+    pass  # Prose editor functionality will be gracefully unavailable
 
 
 DEFAULT_CONFIG = getattr(
@@ -98,6 +107,7 @@ class JSONEditorWidget(forms.Textarea):
             "screen": ["django_json_schema_editor/django_theme.css"],
         }
         js = [
+            importmap,
             "django_json_schema_editor/vendor/jsoneditor.js",
             "django_json_schema_editor/django_theme.js",
             "django_json_schema_editor/foreign_key.js",

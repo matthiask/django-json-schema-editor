@@ -34,6 +34,15 @@ dependencies = [
 optional-dependencies.prose = [
   "django-prose-editor>=0.11a11",
 ]
+optional-dependencies.tests = [
+  "asgiref",
+  "coverage",
+  "pytest",
+  "pytest-asyncio",
+  "pytest-cov",
+  "pytest-django",
+  "pytest-playwright",
+]
 
 urls.Documentation = "https://github.com/matthiask/django-json-schema-editor#readme"
 urls.Issues = "https://github.com/matthiask/django-json-schema-editor/issues"
@@ -84,8 +93,6 @@ lint.extend-select = [
   "PLW",
   # unused noqa
   "RUF100",
-  # flake8-simplify
-  "SIM",
   # pyupgrade
   "UP",
   "W",
@@ -107,3 +114,14 @@ lint.per-file-ignores."*/migrat*/*" = [
 lint.isort.combine-as-imports = true
 lint.isort.lines-after-imports = 2
 lint.mccabe.max-complexity = 15
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "testapp.settings"
+python_files = "test_*.py"
+addopts = "--strict-markers"
+testpaths = [ "tests" ]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+  "e2e: End-to-end browser tests",
+]
