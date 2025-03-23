@@ -20,9 +20,29 @@ class Thing(models.Model):
             "properties": {
                 "text": {"type": "string"},
                 "prose": {"type": "string", "format": "prose"},
+                "file": {
+                    "type": "string",
+                    "format": "foreign_key",
+                    "options": {
+                        "url": "/admin/testapp/file/?_popup=1&_to_field=id",
+                    },
+                },
             },
         }
     )
 
     def __str__(self):
         return ""
+
+
+def get_file_ids(plugin):
+    if file := plugin.data.get("file"):
+        return [int(file)]
+    return []
+
+
+Thing.register_data_reference(
+    File,
+    name="files",
+    getter=get_file_ids,
+)
