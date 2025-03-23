@@ -67,12 +67,45 @@ def test_json_editor_prose(page, live_server):
         }
     )
 
-    # Go to the add page
+    # Go to the change page
     page.goto(f"{live_server.url}/admin/testapp/thing/{thing.pk}/change/")
 
     # Check that the prose editor is loaded
     editor_container = page.locator(".django_json_schema_editor")
     expect(editor_container).to_be_visible()
 
+    # Check that the prose editor contains the expected content
     prose_container = page.locator(".prose-editor")
     expect(prose_container).to_be_visible()
+
+    # Wait for the editor to fully initialize
+    page.wait_for_timeout(1000)
+
+    # Verify the hidden textarea with our JSON data
+    textarea = page.locator("textarea#id_data")
+    # The textarea is hidden, so we don't check visibility
+    textarea_value = textarea.input_value()
+    textarea_json = page.evaluate("value => JSON.parse(value)", textarea_value)
+    assert textarea_json["text"] == "Hello World"
+    assert textarea_json["prose"] == "<strong>Prose</strong> is <em>fine</em>"
+
+    # Find the JSON editor object container
+    editor_container = page.locator(".je-object__container")
+    expect(editor_container).to_be_visible()
+
+    # Check for the text field using the exact ID from the HTML
+    text_input = page.locator('input[id="root[text]"]')
+    expect(text_input).to_be_visible()
+    expect(text_input).to_have_value("Hello World")
+
+    # Check for the prose content using the exact selector from the HTML
+    prose_editor = page.locator(".prose-editor .ProseMirror")
+    expect(prose_editor).to_be_visible()
+
+    # Check if the prose editor contains our expected text
+    expect(prose_editor).to_contain_text("Prose is fine")
+
+    # Verify the HTML content
+    prose_html = prose_editor.inner_html()
+    assert "<strong>Prose</strong>" in prose_html
+    assert "<em>fine</em>" in prose_html
