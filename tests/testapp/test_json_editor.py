@@ -10,26 +10,26 @@ from testapp.models import Thing
 os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 
 
+def login_admin(page, live_server):
+    """Helper function to login as admin."""
+    from django.contrib.auth.models import User
+
+    # Delete any existing superusers with the same username to avoid conflicts
+    User.objects.filter(username="admin").delete()
+
+    User.objects.create_superuser("admin", "admin@example.com", "password")
+    page.goto(f"{live_server.url}/admin/login/")
+    page.fill("#id_username", "admin")
+    page.fill("#id_password", "password")
+    page.click("input[type=submit]")
+    page.wait_for_url(f"{live_server.url}/admin/")
+
+
 @pytest.mark.django_db
 @pytest.mark.e2e
 def test_json_editor_admin_form(page, live_server):
-    # Login first
-    from django.contrib.auth.models import User
-
-    User.objects.create_superuser("admin", "admin@example.com", "password")
-
-    # Visit the login page
-    page.goto(f"{live_server.url}/admin/login/")
-
-    # Fill in the login form
-    page.fill("#id_username", "admin")
-    page.fill("#id_password", "password")
-
-    # Submit the form
-    page.click("input[type=submit]")
-
-    # Wait for the admin index page to load
-    page.wait_for_url(f"{live_server.url}/admin/")
+    """Test that the JSON editor is loaded in the admin form."""
+    login_admin(page, live_server)
 
     # Go to the add page
     page.goto(f"{live_server.url}/admin/testapp/thing/add/")
@@ -42,23 +42,8 @@ def test_json_editor_admin_form(page, live_server):
 @pytest.mark.django_db
 @pytest.mark.e2e
 def test_json_editor_prose(page, live_server):
-    # Login first
-    from django.contrib.auth.models import User
-
-    User.objects.create_superuser("admin", "admin@example.com", "password")
-
-    # Visit the login page
-    page.goto(f"{live_server.url}/admin/login/")
-
-    # Fill in the login form
-    page.fill("#id_username", "admin")
-    page.fill("#id_password", "password")
-
-    # Submit the form
-    page.click("input[type=submit]")
-
-    # Wait for the admin index page to load
-    page.wait_for_url(f"{live_server.url}/admin/")
+    """Test that prose editor loads and displays content correctly."""
+    login_admin(page, live_server)
 
     thing = Thing.objects.create(
         data={
@@ -109,3 +94,131 @@ def test_json_editor_prose(page, live_server):
     prose_html = prose_editor.inner_html()
     assert "<strong>Prose</strong>" in prose_html
     assert "<em>fine</em>" in prose_html
+
+
+@pytest.mark.django_db
+@pytest.mark.e2e
+def test_json_editor_edit_save(page, live_server):
+    """Test editing and saving content in the JSON editor."""
+    login_admin(page, live_server)
+
+    thing = Thing.objects.create(
+        data={
+            "text": "Original text",
+            "prose": "Original prose",
+        }
+    )
+
+    # Go to the change page
+    page.goto(f"{live_server.url}/admin/testapp/thing/{thing.pk}/change/")
+    page.wait_for_timeout(1000)  # Wait for editor to initialize
+
+    # Edit the regular text field
+    text_input = page.locator('input[id="root[text]"]')
+    expect(text_input).to_be_visible()
+    text_input.fill("Updated text")
+
+    # Edit the prose field - focus on the element first
+    prose_editor = page.locator(".prose-editor .ProseMirror")
+    expect(prose_editor).to_be_visible()
+    prose_editor.click()
+
+    # Clear the content and type new content
+    page.keyboard.press("Control+A")
+    page.keyboard.press("Delete")
+    page.keyboard.type("New prose content")
+
+    # Submit the form to save changes
+    page.click('input[name="_save"]')
+
+    # Navigate back to the object to verify the changes were saved
+    page.goto(f"{live_server.url}/admin/testapp/thing/{thing.pk}/change/")
+    page.wait_for_timeout(1000)
+
+    # Verify text field was updated
+    text_input = page.locator('input[id="root[text]"]')
+    expect(text_input).to_have_value("Updated text")
+
+    # Verify prose field was updated
+    prose_editor = page.locator(".prose-editor .ProseMirror")
+    expect(prose_editor).to_contain_text("New prose content")
+
+    # Verify the underlying JSON data
+    textarea = page.locator("textarea#id_data")
+    textarea_value = textarea.input_value()
+    textarea_json = page.evaluate("value => JSON.parse(value)", textarea_value)
+    assert textarea_json["text"] == "Updated text"
+    assert "New prose content" in textarea_json["prose"]
+
+
+@pytest.mark.django_db
+@pytest.mark.e2e
+def test_json_editor_display(page, live_server):
+    """Test that the JSON schema editor correctly displays data."""
+    login_admin(page, live_server)
+
+    # Create a test object directly via Django model
+    test_data = {"text": "Test text field", "prose": "<p>Test prose content</p>"}
+    Thing.objects.create(data=test_data)
+
+    # Go directly to the edit page for the first Thing object
+    thing = Thing.objects.first()
+    page.goto(f"{live_server.url}/admin/testapp/thing/{thing.pk}/change/")
+
+    # Wait for editor to initialize
+    page.wait_for_timeout(1000)
+
+    # Verify that text field displays our test data
+    text_input = page.locator('input[id="root[text]"]')
+    expect(text_input).to_be_visible()
+    expect(text_input).to_have_value("Test text field")
+
+    # Verify that prose field contains our test content
+    prose_editor = page.locator(".prose-editor .ProseMirror")
+    expect(prose_editor).to_be_visible()
+    expect(prose_editor).to_contain_text("Test prose content")
+
+
+@pytest.mark.django_db
+@pytest.mark.e2e
+def test_json_editor_ui_elements(page, live_server):
+    """Test UI elements of the JSON editor like toolbar buttons."""
+    login_admin(page, live_server)
+
+    # Go to the add page
+    page.goto(f"{live_server.url}/admin/testapp/thing/add/")
+    page.wait_for_timeout(1000)  # Wait for editor to initialize
+
+    # Verify the editor has loaded and the UI elements are present
+
+    # Prose editor toolbar should be visible
+    toolbar = page.locator(".prose-menubar")
+    expect(toolbar).to_be_visible()
+
+    # Check that formatting buttons exist and are visible
+    expect(page.locator(".prose-menubar__button[title='bold']")).to_be_visible()
+    expect(page.locator(".prose-menubar__button[title='italic']")).to_be_visible()
+    expect(page.locator(".prose-menubar__button[title='underline']")).to_be_visible()
+
+    # Verify the text editor field is present
+    text_input = page.locator('input[id="root[text]"]')
+    expect(text_input).to_be_visible()
+
+    # Focus on the prose editor
+    prose_editor = page.locator(".prose-editor .ProseMirror")
+    expect(prose_editor).to_be_visible()
+    prose_editor.click()
+
+    # Type some text
+    page.keyboard.type("Testing formatting")
+
+    # Select the text
+    page.keyboard.press("Control+A")
+
+    # Click the bold button in the prose editor toolbar
+    bold_button = page.locator(".prose-menubar__button[title='bold']")
+    bold_button.click()
+
+    # Verify the text is now bold (check in the DOM)
+    prose_html = prose_editor.inner_html()
+    assert "<strong>Testing formatting</strong>" in prose_html
