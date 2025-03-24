@@ -4,7 +4,14 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+
+0.4 (2025-03-24)
+~~~~~~~~~~~~~~~~
+
 - Added a simple e2e test suite.
+- Improved the prose editor integration, added the required importmap
+  dependency.
+- Expanded the README a lot.
 
 
 0.3 (2025-03-20)
