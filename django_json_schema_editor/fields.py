@@ -51,6 +51,7 @@ class JSONField(models.JSONField):
     def __init__(self, *args, **kwargs):
         self._config = kwargs.pop("config", None)
         self._schema = kwargs.pop("schema", None)
+        self._foreign_key_descriptions = kwargs.pop("foreign_key_descriptions", [])
         super().__init__(*args, **kwargs)
 
     def deconstruct(self):
@@ -60,7 +61,12 @@ class JSONField(models.JSONField):
     def formfield(self, **kwargs):
         kwargs.setdefault(
             "form_class",
-            partial(JSONEditorField, config=self._config, schema=self._schema),
+            partial(
+                JSONEditorField,
+                config=self._config,
+                schema=self._schema,
+                foreign_key_descriptions=self._foreign_key_descriptions,
+            ),
         )
         return super().formfield(**kwargs)
 

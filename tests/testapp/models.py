@@ -3,6 +3,10 @@ from django.db import models
 from django_json_schema_editor.fields import JSONField
 
 
+def itemgetter(key):
+    return lambda value: value.get(key)
+
+
 class File(models.Model):
     name = models.CharField(max_length=100)
 
@@ -28,7 +32,8 @@ class Thing(models.Model):
                     },
                 },
             },
-        }
+        },
+        foreign_key_descriptions=[("testapp.file", itemgetter("files"))],
     )
 
     def __str__(self):
