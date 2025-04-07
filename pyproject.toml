@@ -32,7 +32,7 @@ dependencies = [
   "fastjsonschema>=2.19",
 ]
 optional-dependencies.prose = [
-  "django-prose-editor>=0.11b2",
+  "django-prose-editor>=0.11b3",
 ]
 optional-dependencies.tests = [
   "asgiref",

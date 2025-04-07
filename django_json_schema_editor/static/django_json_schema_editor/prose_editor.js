@@ -1,43 +1,25 @@
-import {
-  // Always recommended:
-  Document,
-  Dropcursor,
-  Gapcursor,
-  Paragraph,
-  HardBreak,
-  Text,
-  // Add support for a few marks:
-  Bold,
-  Italic,
-  Underline,
-  Subscript,
-  Superscript,
-  // A menu is always nice:
-  Menu,
-  // Useful:
-  createTextareaEditor,
-} from "django-prose-editor/editor"
+import { createEditor } from "django-prose-editor/configurable"
 
-function createJSONProseEditor(textarea) {
-  const extensions = [
-    Document,
-    Dropcursor,
-    Gapcursor,
-    Paragraph,
-    HardBreak,
-    Text,
-    Bold,
-    Italic,
-    Underline,
-    Subscript,
-    Superscript,
-    Menu,
-  ]
-
-  const editor = createTextareaEditor(textarea, extensions)
-  return () => {
-    editor.destroy()
-  }
+function createJSONProseEditor(textarea, setClobber) {
+  setClobber(null)
+  createEditor(textarea, {
+    extensions: {
+      Document: true,
+      Paragraph: true,
+      HardBreak: true,
+      Text: true,
+      Bold: true,
+      Italic: true,
+      Underline: true,
+      Subscript: true,
+      Superscript: true,
+      Menu: true,
+    },
+  }).then((editor) => {
+    setClobber(() => {
+      editor.destroy()
+    })
+  })
 }
 
 JSONEditor.defaults.editors.prose = class extends (
@@ -48,7 +30,10 @@ JSONEditor.defaults.editors.prose = class extends (
 
     if (res?.changed) {
       this.clobber?.()
-      this.clobber = createJSONProseEditor(this.input)
+
+      createJSONProseEditor(this.input, (clobber) => {
+        this.clobber = clobber
+      })
     }
   }
 
@@ -60,7 +45,9 @@ JSONEditor.defaults.editors.prose = class extends (
 
   afterInputReady() {
     this.clobber?.()
-    this.clobber = createJSONProseEditor(this.input)
+    createJSONProseEditor(this.input, (clobber) => {
+      this.clobber = clobber
+    })
 
     this.input.addEventListener("input", (e) => {
       e.preventDefault()
