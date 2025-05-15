@@ -190,7 +190,8 @@
   height: 70px;
 }
 .django_json_schema_editor .je-textarea,
-.django_json_schema_editor input:not(.vForeignKeyRawIdAdminField) {
+.django_json_schema_editor
+  input:not(.vForeignKeyRawIdAdminField, [type="checkbox"], [type="radio"]) {
   width: calc(100% - 16px);
 }
 

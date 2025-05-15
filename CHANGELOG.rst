@@ -4,6 +4,8 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Fixed the size of checkboxes in the JSON editor.
+
 
 0.4 (2025-03-24)
 ~~~~~~~~~~~~~~~~
