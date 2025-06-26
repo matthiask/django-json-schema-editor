@@ -74,6 +74,40 @@ class MyModel(models.Model):
     )
 ```
 
+#### Configuring Prose Editor Extensions
+
+You can customize which formatting options are available in the prose editor by
+specifying extensions in the field options:
+
+```python
+class MyModel(models.Model):
+    data = JSONField(
+        schema={
+            "type": "object",
+            "properties": {
+                "title": {"type": "string"},
+                "content": {
+                    "type": "string",
+                    "format": "prose",
+                    "options": {
+                        "extensions": {
+                            "Bold": True,
+                            "Italic": True,
+                            # Only Bold and Italic will be available
+                            # (core extensions are always included)
+                        }
+                    }
+                },
+            },
+        }
+    )
+```
+
+The prose editor always includes core extensions (Document, Paragraph,
+HardBreak, Text, Menu). By default, it also includes Bold, Italic, Underline,
+Subscript, and Superscript extensions. When you specify custom extensions, only
+the core extensions plus your specified extensions will be active.
+
 ### Foreign Key References
 
 You can reference Django models in your JSON data:
@@ -99,7 +133,8 @@ class MyModel(models.Model):
 
 ### Data References and Referential Integrity
 
-One of the most powerful features is the ability to maintain referential integrity between JSON data and model instances:
+One of the most powerful features is the ability to maintain referential
+integrity between JSON data and model instances:
 
 ```python
 from django.db import models

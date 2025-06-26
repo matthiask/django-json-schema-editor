@@ -5,6 +5,8 @@ Next version
 ~~~~~~~~~~~~
 
 - Fixed the size of checkboxes in the JSON editor.
+- Added configurable extensions support for the prose editor, allowing
+  customization of available formatting options.
 
 
 0.4 (2025-03-24)

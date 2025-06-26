@@ -1,20 +1,31 @@
 import { createEditor } from "django-prose-editor/configurable"
 
-function createJSONProseEditor(textarea, setClobber) {
+const core = {
+  Document: true,
+  Paragraph: true,
+  HardBreak: true,
+  Text: true,
+  Menu: true,
+}
+const defaults = {
+  Bold: true,
+  Italic: true,
+  Underline: true,
+  Subscript: true,
+  Superscript: true,
+}
+
+function createJSONProseEditor(textarea, options, setClobber) {
+  console.debug(options)
   setClobber(null)
+
+  let extensions = defaults
+  if (Object.hasOwn(options, "extensions")) {
+    extensions = options.extensions
+  }
+
   createEditor(textarea, {
-    extensions: {
-      Document: true,
-      Paragraph: true,
-      HardBreak: true,
-      Text: true,
-      Bold: true,
-      Italic: true,
-      Underline: true,
-      Subscript: true,
-      Superscript: true,
-      Menu: true,
-    },
+    extensions: { ...core, ...extensions },
   }).then((editor) => {
     setClobber(() => {
       editor.destroy()
@@ -31,7 +42,7 @@ JSONEditor.defaults.editors.prose = class extends (
     if (res?.changed) {
       this.clobber?.()
 
-      createJSONProseEditor(this.input, (clobber) => {
+      createJSONProseEditor(this.input, this.options, (clobber) => {
         this.clobber = clobber
       })
     }
@@ -45,7 +56,7 @@ JSONEditor.defaults.editors.prose = class extends (
 
   afterInputReady() {
     this.clobber?.()
-    createJSONProseEditor(this.input, (clobber) => {
+    createJSONProseEditor(this.input, this.options, (clobber) => {
       this.clobber = clobber
     })
 
