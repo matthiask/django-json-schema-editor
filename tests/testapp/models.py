@@ -41,8 +41,9 @@ class Thing(models.Model):
 
 
 def get_file_ids(plugin):
-    if file := plugin.data.get("file"):
-        return [int(file)]
+    file = plugin.data.get("file")
+    if file:
+        return [file]
     return []
 
 

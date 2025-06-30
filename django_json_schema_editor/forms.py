@@ -66,14 +66,19 @@ class JSONEditorField(forms.JSONField):
 
 def resolve_foreign_key_descriptions(model, pks):
     pks = [pk for pk in pks if pk] if pks else ()
-    return (
-        {
-            f"{model._meta.label_lower}:{obj.pk}": Truncator(obj).words(5)
-            for obj in model._default_manager.filter(pk__in=pks)
-        }
-        if pks
-        else {}
-    )
+    try:
+        return (
+            {
+                f"{model._meta.label_lower}:{obj.pk}": Truncator(obj).words(5)
+                for obj in model._default_manager.filter(pk__in=pks)
+            }
+            if pks
+            else {}
+        )
+    except (ValueError, TypeError):
+        # This can happen when the list of primary keys contains values which
+        # are not parseable as primary keys.
+        return {}
 
 
 class JSONEditorWidget(forms.Textarea):

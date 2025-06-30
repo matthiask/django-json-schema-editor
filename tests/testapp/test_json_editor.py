@@ -1,9 +1,11 @@
 import os
 
 import pytest
+from django.core.exceptions import ValidationError
 from django.db.models.deletion import ProtectedError
 from playwright.sync_api import expect
 
+from django_json_schema_editor.forms import resolve_foreign_key_descriptions
 from testapp.models import File, Thing
 
 
@@ -334,3 +336,207 @@ def test_foreign_key_selector(page, live_server):
 
     # We cannot test clicking the lookup button because it opens a popup window,
     # but we've verified the core UI elements are present and working correctly
+
+
+@pytest.mark.django_db
+def test_valid_foreign_key_references():
+    """Test that valid foreign key references work correctly."""
+    # Create test files
+    file1 = File.objects.create(name="valid-file-1.txt")
+    file2 = File.objects.create(name="valid-file-2.txt")
+
+    # Test with valid single reference
+    thing = Thing.objects.create(
+        data={
+            "text": "Valid reference test",
+            "file": str(file1.pk),
+        }
+    )
+
+    # Should not raise any validation errors
+    thing.full_clean()
+
+    # Test updating to another valid reference
+    thing.data["file"] = str(file2.pk)
+    thing.save()
+    thing.full_clean()  # Should still be valid
+
+
+@pytest.mark.django_db
+def test_invalid_nonexistent_foreign_key_references():
+    """Test that references to non-existent primary keys raise ValidationError."""
+    # Create a file for context
+    File.objects.create(name="existing-file.txt")
+
+    # Test with non-existent primary key
+    thing = Thing.objects.create(
+        data={
+            "text": "Invalid reference test",
+            "file": "-1",  # Non-existent PK
+        }
+    )
+
+    # Should raise ValidationError during full_clean
+    with pytest.raises(ValidationError) as exc_info:
+        thing.full_clean()
+
+    error_message = str(exc_info.value)
+    assert "Some of the references are invalid" in error_message
+    assert "-1" in error_message
+
+    thing.delete()
+
+
+@pytest.mark.django_db
+def test_invalid_unparseable_foreign_key_references():
+    """Test that unparseable primary key values raise ValidationError."""
+    # Create a file for context
+    File.objects.create(name="existing-file.txt")
+
+    # Test with unparseable primary key
+    thing = Thing.objects.create(
+        data={
+            "text": "Unparseable reference test",
+            "file": "asdf",  # Unparseable as integer PK
+        }
+    )
+
+    # Should raise ValidationError during full_clean
+    with pytest.raises(ValidationError) as exc_info:
+        thing.full_clean()
+
+    error_message = str(exc_info.value)
+    assert "Some of the references are invalid" in error_message
+    assert "asdf" in error_message
+
+    thing.delete()
+
+
+@pytest.mark.django_db
+def test_empty_and_null_foreign_key_references():
+    """Test that empty/null references are handled gracefully."""
+    # Test with empty string
+    thing1 = Thing.objects.create(
+        data={
+            "text": "Empty reference test",
+            "file": "",  # Empty string should be fine
+        }
+    )
+
+    # Should not raise any validation errors
+    thing1.full_clean()
+
+    # Test with null/None
+    thing2 = Thing.objects.create(
+        data={
+            "text": "Null reference test",
+            "file": None,  # None should be fine
+        }
+    )
+
+    # Should not raise any validation errors
+    thing2.full_clean()
+
+    # Test with missing field entirely
+    thing3 = Thing.objects.create(
+        data={
+            "text": "Missing field test",
+            # No "file" field at all
+        }
+    )
+
+    # Should not raise any validation errors
+    thing3.full_clean()
+
+
+@pytest.mark.django_db
+def test_resolve_foreign_key_descriptions_error_handling():
+    """Test that resolve_foreign_key_descriptions handles invalid PKs gracefully."""
+    # Create a test file
+    file1 = File.objects.create(name="test-file.txt")
+
+    # Test with valid primary keys
+    result = resolve_foreign_key_descriptions(File, [str(file1.pk)])
+    assert f"testapp.file:{file1.pk}" in result
+    assert result[f"testapp.file:{file1.pk}"] == "test-file.txt"
+
+    # Test with mix of valid and invalid primary keys
+    result = resolve_foreign_key_descriptions(File, [str(file1.pk), "asdf", "-1"])
+    # Should return empty dict due to ValueError/TypeError in the mixed case
+    assert result == {}
+
+    # Test with only invalid primary keys
+    result = resolve_foreign_key_descriptions(File, ["asdf", "xyz"])
+    assert result == {}
+
+    # Test with empty list
+    result = resolve_foreign_key_descriptions(File, [])
+    assert result == {}
+
+    # Test with None
+    result = resolve_foreign_key_descriptions(File, None)
+    assert result == {}
+
+
+@pytest.mark.django_db
+def test_foreign_key_validation_with_string_pks():
+    """Test validation works correctly with string primary keys."""
+    # Note: File model uses integer PKs, but we test the conversion logic
+
+    # Create files with known integer PKs
+    file1 = File.objects.create(name="string-pk-test-1.txt")
+    file2 = File.objects.create(name="string-pk-test-2.txt")
+
+    # Test with string representations of valid integer PKs
+    thing = Thing.objects.create(
+        data={
+            "text": "String PK test",
+            "file": str(file1.pk),  # String representation of int PK
+        }
+    )
+
+    # Should not raise validation errors
+    thing.full_clean()
+
+    # Test updating to different valid string PK
+    thing.data["file"] = str(file2.pk)
+    thing.save()
+    thing.full_clean()
+
+
+@pytest.mark.django_db
+def test_foreign_key_validation_edge_cases():
+    """Test edge cases in foreign key validation."""
+    # Test with boolean False (falsy, should be treated as unset)
+    thing1 = Thing.objects.create(
+        data={
+            "text": "Boolean False PK test",
+            "file": False,  # Boolean False, falsy
+        }
+    )
+
+    # Should NOT raise ValidationError since falsy values are treated as unset
+    thing1.full_clean()  # Should pass without error
+
+    # Test with integer 0 (also falsy, should be treated as unset)
+    thing2 = Thing.objects.create(
+        data={
+            "text": "Integer zero PK test",
+            "file": 0,  # Integer 0, falsy
+        }
+    )
+
+    # Should NOT raise ValidationError since falsy values are treated as unset
+    thing2.full_clean()  # Should pass without error
+
+    # Test with boolean True (truthy, should be validated)
+    thing3 = Thing(
+        data={
+            "text": "Boolean True PK test",
+            "file": True,  # Boolean True, truthy but invalid
+        }
+    )
+
+    # Should raise ValidationError (True is truthy but likely not a valid PK)
+    with pytest.raises(ValidationError):
+        thing3.full_clean()

@@ -4,6 +4,8 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Added validation for foreign key references to provide meaningful error
+  messages instead of server crashes when invalid primary keys are entered.
 
 0.5 (2025-06-26)
 ~~~~~~~~~~~~~~~~
