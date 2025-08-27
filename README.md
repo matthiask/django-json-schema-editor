@@ -179,6 +179,8 @@ This prevents a referenced image from being deleted as long as it's referenced i
 
 The `name` field will be the name of the underlying `ManyToManyField` which actually references the `Image` instances.
 
+Note that the `get_image_ids` getter has to be written in a very conservative way -- you cannot be sure that the model is valid otherwise. For example, you cannot assume that foreign key values are set (even when they are `null=False`). Django's validation hasn't cleared the model before the getter is invoked for the first time.
+
 ## JSON Schema Support
 
 The widget supports the [JSON Schema](https://json-schema.org/) standard for defining the structure and validation rules of your JSON data. Notable supported features include:

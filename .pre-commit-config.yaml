@@ -1,7 +1,7 @@
 exclude: ".yarn/|yarn.lock|\\.min\\.(css|js)$|vendor"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-added-large-files
       - id: check-builtin-literals
@@ -14,18 +14,18 @@ repos:
       - id: mixed-line-ending
       - id: trailing-whitespace
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.25.0
+    rev: 1.26.0
     hooks:
       - id: django-upgrade
         args: [--target-version, "4.2"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.12.0"
+    rev: "v0.12.10"
     hooks:
       - id: ruff
         args: [--unsafe-fixes]
       - id: ruff-format
   - repo: https://github.com/biomejs/pre-commit
-    rev: "v1.9.4"
+    rev: "v2.2.2"
     hooks:
       - id: biome-check
         args: [--unsafe]
