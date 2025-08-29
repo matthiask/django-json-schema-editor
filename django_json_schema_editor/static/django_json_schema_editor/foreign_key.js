@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById(win.name.replace(/__[0-9]+$/, ""))
     __original_dismissRelatedLookupPopup(win, chosenId)
 
-    input.dispatchEvent(new Event("input"))
+    input.dispatchEvent(new InputEvent("input", { bubbles: true }))
   }
 })
 /* End patching */
