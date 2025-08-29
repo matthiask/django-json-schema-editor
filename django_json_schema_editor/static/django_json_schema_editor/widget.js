@@ -38,4 +38,23 @@ const initEditor = (el) => {
   editor.on("change", () => {
     input.value = JSON.stringify(editor.getValue())
   })
+
+  // The JSON is only updated on change events. This can cause edits to be lost
+  // when directly triggering a save without first leaving the input element.
+  // (e.g. when using ctrl-s in the django-content-editor)
+  const dispatchChangeEventOnInput = debounce((e) => {
+    if (e.target.matches("input, textarea")) {
+      e.target.dispatchEvent(new Event("change", { bubbles: true }))
+    }
+  }, 100)
+
+  editor.element.addEventListener("input", dispatchChangeEventOnInput)
+}
+
+const debounce = (f, ms) => {
+  let t
+  return (...a) => {
+    clearTimeout(t)
+    t = setTimeout(() => f(...a), ms)
+  }
 }

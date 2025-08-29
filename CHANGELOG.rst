@@ -6,6 +6,9 @@ Next version
 
 - Added validation for foreign key references to provide meaningful error
   messages instead of server crashes when invalid primary keys are entered.
+- Fixed the error where edits could be lost by automatically dispatching
+  ``change`` events when seeing ``input`` events to trigger the JSON editor's
+  ``onChange`` updates.
 
 0.5 (2025-06-26)
 ~~~~~~~~~~~~~~~~
