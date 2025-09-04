@@ -1,6 +1,9 @@
+import json
 import os
 
 import pytest
+from django import forms
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models.deletion import ProtectedError
 from playwright.sync_api import expect
@@ -15,8 +18,6 @@ os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 
 def login_admin(page, live_server):
     """Helper function to login as admin."""
-    from django.contrib.auth.models import User
-
     # Delete any existing superusers with the same username to avoid conflicts
     User.objects.filter(username="admin").delete()
 
@@ -306,7 +307,6 @@ def test_foreign_key_selector(page, live_server):
 
     # Take a screenshot to debug the populated view
     screenshot_dir = "/tmp/playwright_screenshots"
-    import os
 
     os.makedirs(screenshot_dir, exist_ok=True)
     page.screenshot(path=f"{screenshot_dir}/foreign_key_edit_test.png", full_page=True)
@@ -540,3 +540,15 @@ def test_foreign_key_validation_edge_cases():
     # Should raise ValidationError (True is truthy but likely not a valid PK)
     with pytest.raises(ValidationError):
         thing3.full_clean()
+
+
+@pytest.mark.django_db
+def test_validation():
+    class ThingForm(forms.ModelForm):
+        class Meta:
+            model = Thing
+            fields = ["data"]
+
+    form = ThingForm({"data": json.dumps({"stuff": "123"})})
+    assert not form.is_valid()
+    assert "data.stuff must match pattern" in str(form.errors)

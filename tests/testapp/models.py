@@ -23,6 +23,7 @@ class Thing(models.Model):
             "type": "object",
             "properties": {
                 "text": {"type": "string"},
+                "stuff": {"type": "string", "pattern": "^[A-Z]*$"},
                 "prose": {"type": "string", "format": "prose"},
                 "file": {
                     "type": "string",
