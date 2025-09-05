@@ -30,11 +30,6 @@ DEFAULT_CONFIG = getattr(
         "disable_collapse": True,
         # "disable_edit_json": True,
         "display_required_only": False,
-        # Set all properties to required by default (which means that the
-        # property is required, not that the value has to be truthy). We want
-        # to show properties introduced later by default and not force users to
-        # add the properties themselves.
-        "required_by_default": True,
         "theme": "django",
     },
 )
