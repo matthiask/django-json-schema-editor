@@ -9,6 +9,10 @@ Next version
 - Fixed the error where edits could be lost by automatically dispatching
   ``change`` events when seeing ``input`` events to trigger the JSON editor's
   ``onChange`` updates.
+- Added ``"required_by_default": True`` to the default JSON editor settings.
+  Properties added later should automatically be shown in the admin interface,
+  it's a better default. You can still override this of course.
+
 
 0.5 (2025-06-26)
 ~~~~~~~~~~~~~~~~
