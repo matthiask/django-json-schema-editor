@@ -4,6 +4,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Fixed the initialization of the JSON editor when we start with null values.
+
+
 0.7 (2025-09-05)
 ~~~~~~~~~~~~~~~~
 

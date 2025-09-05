@@ -16,7 +16,6 @@ const defaults = {
 }
 
 function createJSONProseEditor(textarea, options, setClobber) {
-  console.debug(options)
   setClobber(null)
 
   let extensions = defaults
