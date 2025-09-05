@@ -53,9 +53,16 @@ class MyModel(models.Model):
                 "description": {"type": "string"},
                 "count": {"type": "integer"},
             },
+            "required": ["title", "description", "count"],
         }
     )
 ```
+
+**Note!** ``required`` contains a list of properties which should exist in the
+JSON blob. The values themselves do not have to be truthy. The advantage of
+always specifying ``required`` is that the properties are automatically shown
+also when editing data which was added when those properties didn't all exist
+yet.
 
 ### Rich Text Editing
 
@@ -70,6 +77,7 @@ class MyModel(models.Model):
                 "title": {"type": "string"},
                 "content": {"type": "string", "format": "prose"},
             },
+            "required": ["title", "content"],
         }
     )
 ```
@@ -99,6 +107,7 @@ class MyModel(models.Model):
                     }
                 },
             },
+            "required": ["title", "content"],
         }
     )
 ```
@@ -127,6 +136,7 @@ class MyModel(models.Model):
                     },
                 },
             },
+            "required": ["title", "image"],
         }
     )
 ```
@@ -159,6 +169,7 @@ class Article(models.Model):
                     },
                 },
             },
+            "required": ["title", "content", "featured_image"],
         }
     )
 
