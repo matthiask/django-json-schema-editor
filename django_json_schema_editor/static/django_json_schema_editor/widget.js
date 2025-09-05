@@ -26,15 +26,12 @@ const initEditor = (el) => {
 
   const input = el.querySelector("textarea")
   const config = JSON.parse(el.dataset.editorConfig)
+
+  if (input.value) {
+    config.startval = JSON.parse(input.value)
+  }
+
   const editor = new JSONEditor(el, config)
-
-  editor.on("ready", () => {
-    const data = input.value ? JSON.parse(input.value) : null
-    if (data) {
-      editor.setValue(data)
-    }
-  })
-
   editor.on("change", () => {
     input.value = JSON.stringify(editor.getValue())
   })
