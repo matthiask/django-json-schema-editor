@@ -4,6 +4,13 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+0.7 (2025-09-05)
+~~~~~~~~~~~~~~~~
+
+- Reverted the ``required_by_default`` change, it was bad (tm) because it
+  didn't allow removing existing properties at all. Better learn setting the
+  ``required`` properties explicitly!
+
 
 0.6 (2025-09-05)
 ~~~~~~~~~~~~~~~~
